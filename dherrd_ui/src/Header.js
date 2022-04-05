@@ -2,7 +2,7 @@ import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
+import Badge from 'react-bootstrap/Badge';
 
 function Header(props){
     const wallet_addr = '0x29D7d1dd5B6f9C864d9db560D72a247c178aE86B'
@@ -12,9 +12,10 @@ function Header(props){
                 <Col><h1>DeChat</h1></Col>
                 <Col sm={6}/>
                 <Col>
-                    <Card style={{backgroundColor:'#FAF6B2', color:'black'}}>
-                        <Card.Title>{wallet_addr}</Card.Title>
-                    </Card>
+                    <Badge bg='light' text='dark'>
+                    <h6>{wallet_addr}</h6>
+                    </Badge>
+                    
                 </Col>
             </Row>
         </Container>
@@ -22,3 +23,8 @@ function Header(props){
 }
 
 export default Header;
+/*
+<Card style={{backgroundColor:'#FAF6B2', color:'black'}}>
+                        <Card.Body><h6>{wallet_addr}</h6></Card.Body>
+                    </Card>
+*/
