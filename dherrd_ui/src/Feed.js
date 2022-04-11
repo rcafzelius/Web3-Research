@@ -1,6 +1,7 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button'
 import { FaArrowUp } from 'react-icons/fa';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -13,7 +14,11 @@ function Feed(props){
     ]
     return(
         <Container>
-            <Row><h3>Welcome to DeChat</h3></Row>
+            <Row>
+                <Col sm={{offset:5}}>
+                    <h3>Welcome to DeChat</h3>
+                </Col>
+            </Row>
             <ListGroup style={{width: '75%', margin:'auto'}}>
                 {data.map(item=>{
                     return(

@@ -23,8 +23,3 @@ function Header(props){
 }
 
 export default Header;
-/*
-<Card style={{backgroundColor:'#FAF6B2', color:'black'}}>
-                        <Card.Body><h6>{wallet_addr}</h6></Card.Body>
-                    </Card>
-*/

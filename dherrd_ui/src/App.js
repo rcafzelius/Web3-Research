@@ -5,7 +5,7 @@ import Header from './Header';
 import Feed from './Feed';
 import Login from './Login';
 import {
-  HashRouter as Router,
+  BrowserRouter as Router,
   Routes,
   Route
 } from "react-router-dom";
@@ -18,8 +18,8 @@ function App() {
         <Header/>
         <main>
           <Routes>
+            <Route path="login" element={<Login/>}/>
             <Route path="/" element={<Feed/>}/>
-            <Route path="/login" element={<Login/>}/>
           </Routes>
         </main>
       </div>
