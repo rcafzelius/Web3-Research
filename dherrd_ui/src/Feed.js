@@ -8,10 +8,14 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
 
 function Feed(props){
-    var data = [{content:'this is a post', likes:2},
-    {content:'this is another post', likes: 10},
-    {content:'what a great app', likes: 69}
+    var data = [
+        {content:'this is a post', likes:2},
+        {content:'this is another post', likes: 10},
+        {content:'what a great app', likes: 69}
     ]
+    if (typeof window.ethereum !== 'undefined') {
+        console.log('MetaMask is installed!');
+      }
     return(
         <Container>
             <Row>

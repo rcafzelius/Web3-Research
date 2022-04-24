@@ -3,6 +3,9 @@ import GoogleLogin from 'react-google-login';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+//can google token be faked?
+
+//https://docs.moralis.io/moralis-dapp/web3-sdk/account#getnfts
 
 function Login(props){
     const handleFailure = (result) => {
