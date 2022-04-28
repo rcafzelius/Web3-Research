@@ -1,18 +1,25 @@
-import React from 'react';
+import React, {useState} from 'react';
 import GoogleLogin from 'react-google-login';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-//can google token be faked?
+import {useNavigate} from "react-router-dom";
 
 //https://docs.moralis.io/moralis-dapp/web3-sdk/account#getnfts
 
 function Login(props){
+    const [resultText, setResultText] = useState("");
+    let navigate = useNavigate();
     const handleFailure = (result) => {
-        alert(result)
+        setResultText("Must use a bc.edu account");
     };
-    const handleLogin = (googleData) => {
-        console.log(googleData)
+
+    function handleLogin(googleData){
+        console.log(googleData);
+        setResultText("");
+        props.setVerified(true);
+        //mint token here
+        navigate("/");
     }
 
     return(
@@ -30,6 +37,11 @@ function Login(props){
                     onSuccess={handleLogin}
                     onFailure={handleFailure}
                     />
+                </Col>
+            </Row>
+            <Row>
+            <Col sm={{offset:5}} style={{color:"red"}}>
+                    {resultText}
                 </Col>
             </Row>
         </Container>

@@ -7,6 +7,8 @@ import { FaArrowUp } from 'react-icons/fa';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
 
+//add indexes to listgroup items
+
 function Feed(props){
     var data = [
         {content:'this is a post', likes:2},

@@ -8,12 +8,22 @@ import ConnectWallet from './ConnectWallet';
 import {
   BrowserRouter as Router,
   Routes,
-  Route
+  Route,
+  Navigate
 } from "react-router-dom";
 
 //add login logic
 function App() {
   const [accounts, setAccounts] = useState('');
+  const [verified, setVerified] = useState(false);
+  function PrivateRoute({children}){
+    if (!verified){
+      return(
+        <Navigate to="/login" replace />
+      )
+    }
+    return children;
+  }
   return(
     <Router basename={process.env.PUBLIC_URL}>
       <div>
@@ -22,12 +32,19 @@ function App() {
         />
         <main>
           <Routes>
-            <Route path="login" element={<Login/>}/>
+            <Route path="login" element={<Login
+              verified={verified}
+              setVerified={setVerified}
+            />}/>
             <Route path="connect" element={<ConnectWallet
               accounts={accounts}
               setAccounts={setAccounts}
             />}/>
-            <Route path="/" element={<Feed/>}/>
+            <Route path="/" element={
+              <PrivateRoute path="/">
+                <Feed/>
+              </PrivateRoute>
+            }/>
           </Routes>
         </main>
       </div>

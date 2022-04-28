@@ -3,14 +3,16 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import {useNavigate} from "react-router-dom";
 
 //https://docs.moralis.io/moralis-dapp/web3-sdk/account#getnfts
 
 function ConnectWallet(props){
-
+    let navigate = useNavigate();
     async function connectWallet(){
         const act = await window.ethereum.request({ method: 'eth_requestAccounts' })
         props.setAccounts(act);
+        navigate('/');      //add token check here and redirect accordingly
     }
 
     function checkMetaMask(){
@@ -23,7 +25,6 @@ function ConnectWallet(props){
             return('Please install Metamask')
         }
     }
-
 
     return(
         <Container fluid>
