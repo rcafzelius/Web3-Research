@@ -4,7 +4,6 @@ pragma solidity ^0.8.10;
         function add(uint256 a, uint256 b) internal pure returns (uint256) {
             uint256 c = a + b;
             require(c >= a, "SafeMath: addition overflow");
-    
             return c;
         }
     
@@ -15,7 +14,6 @@ pragma solidity ^0.8.10;
         function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
             require(b <= a, errorMessage);
             uint256 c = a - b;
-    
             return c;
         }
     
@@ -26,7 +24,6 @@ pragma solidity ^0.8.10;
     
             uint256 c = a * b;
             require(c / a == b, "SafeMath: multiplication overflow");
-    
             return c;
         }
     
@@ -50,7 +47,9 @@ contract content {
     //Events
     event logPostCreated(address author, uint postId);
     event logLike(address from, uint post);
+    event logUnLike(address from, uint post);
     event logDislike(address from, uint post);
+    event logUnDislike(address from, uint post);
     event logComment(address author, uint postId);
 
     //Post Structure
@@ -102,18 +101,27 @@ contract content {
 
     function getPost(uint _id) public view returns (
         address author, string memory content, uint timestamp, uint likeCount, uint dislikeCount ){
-
         return (posts[_id].author, posts[_id].content, posts[_id].timestamp, posts[_id].likeCount, posts[_id].dislikeCount);
     }
 
     function Like(uint _id) public {
-
-        emit logLike(msg.sender, _id);
+        if  (likes[_id][msg.sender] = true) {
+            likes[_id][msg.sender] = false;
+            emit logUnLike(msg.sender, _id);
+        } else {
+            likes[_id][msg.sender] = true;
+            emit logUnLike(msg.sender, _id);
+        }
     }
 
     function Dislike(uint _id) public {
-
-        emit logDislike(msg.sender, _id);
+        if  (dislikes[_id][msg.sender] = true) {
+            dislikes[_id][msg.sender] = false;
+            emit logUnDislike(msg.sender, _id);
+        } else {
+            dislikes[_id][msg.sender] = true;
+            emit logDislike(msg.sender, _id);
+        }
     }
 
 
