@@ -17,9 +17,9 @@ function App() {
   const [accounts, setAccounts] = useState('');
   const [verified, setVerified] = useState(false);
   function PrivateRoute({children}){
-    if (!verified){
+    if (accounts === ''){
       return(
-        <Navigate to="/login" replace />
+        <Navigate to="/connect" replace />
       )
     }
     return children;
