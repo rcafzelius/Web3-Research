@@ -10,7 +10,7 @@ function Header(props){
             return('No Wallet Connected')
         }
         else{
-            return(props.accounts[0])
+            return(props.accounts)
         }
     }
     return(

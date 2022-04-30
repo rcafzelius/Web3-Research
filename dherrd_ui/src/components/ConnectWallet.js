@@ -6,47 +6,54 @@ import Button from 'react-bootstrap/Button';
 import {useNavigate} from "react-router-dom";
 import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 
-//https://docs.moralis.io/moralis-dapp/web3-sdk/account#getnfts
-
 function ConnectWallet(props){
     let navigate = useNavigate();
     const {
+        user,
         authenticate,
         isAuthenticated,
-        isAuthenticating,
-        user,
-        account,
-        logout
+        Moralis
       } = useMoralis();
       const Web3Api = useMoralisWeb3Api();
 
-      async function login(){
+    async function login(){
         if (!isAuthenticated) {
-          await authenticate({ signingMessage: "Log in using Moralis" })
+            await authenticate({ signingMessage: "Log in using Moralis" })
             .then(function (user) {
-              console.log("logged in user:", user);
-              console.log(user.get("ethAddress"));
+                console.log("logged in user:", user);
+                console.log(user.get("ethAddress"));
             })
             .catch(function (error) {
-              console.log(error);
+                console.log(error);
             });
         }
-        else{
-            fetchNFTs();
+        await Moralis.enableWeb3();
+        props.setAccounts(user.attributes.ethAddress);
+        const hasToken = await fetchNFTs();
+        if (hasToken){
+            //user is verified, go to feed
+            console.log("found token")
+            props.setVerified(true);
+            navigate("/");
+        }else{
+            //send user to login, mint token
+            console.log("rerouting")
+            navigate('/login');
         }
-      };
-    async function connectWallet(){
-        const act = await window.ethereum.request({ method: 'eth_requestAccounts' })
-        props.setAccounts(act);
-        navigate('/login');      //add token check here and redirect accordingly
-    }
+    };
 
     async function fetchNFTs(){
         // get rinkeby NFTs for user
         const testnetNFTs = await Web3Api.Web3API.account.getNFTs({
           chain: "rinkeby",
         });
-        console.log(testnetNFTs.result[0]);
+        const mintAddr = "0x63352EBE37b7cF82b2c2cEEA8903C049C7B4CD08".toLowerCase();
+        const foundToken = testnetNFTs.result.find(nft => nft.token_address === mintAddr)
+        if (foundToken){
+            return true
+        }else{
+            return false
+        }
       };
 
     function checkMetaMask(){

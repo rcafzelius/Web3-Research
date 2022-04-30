@@ -39,6 +39,7 @@ function App() {
             <Route path="connect" element={<ConnectWallet
               accounts={accounts}
               setAccounts={setAccounts}
+              setVerified={setVerified}
             />}/>
             <Route path="/" element={
               <PrivateRoute path="/">

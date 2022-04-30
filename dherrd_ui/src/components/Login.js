@@ -1,24 +1,34 @@
 import React, {useState} from 'react';
+import mintABI from '../utils/abi';
 import GoogleLogin from 'react-google-login';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import {useNavigate} from "react-router-dom";
-
-//https://docs.moralis.io/moralis-dapp/web3-sdk/account#getnfts
+import { useMoralis } from "react-moralis";
 
 function Login(props){
     const [resultText, setResultText] = useState("");
+    const {
+        Moralis
+      } = useMoralis();
     let navigate = useNavigate();
     const handleFailure = (result) => {
         setResultText("Must use a bc.edu account");
     };
 
-    function handleLogin(googleData){
-        console.log(googleData);
+    async function handleLogin(googleData){
+        await Moralis.enableWeb3();
+        const mintAddr = "0x63352EBE37b7cF82b2c2cEEA8903C049C7B4CD08";
+        const options = {
+            contractAddress: mintAddr,
+            functionName: "mint",
+            abi: mintABI,
+        }
+        const message = await Moralis.executeFunction(options)
+        console.log(message, "mint complete")
         setResultText("");
         props.setVerified(true);
-        //mint token here
         navigate("/");
     }
 
