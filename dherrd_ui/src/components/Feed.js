@@ -4,9 +4,11 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button'
 import { FaArrowUp } from 'react-icons/fa';
+import { FaArrowDown } from 'react-icons/fa';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
 import { useMoralisWeb3Api } from "react-moralis";
+//add listeners to buttons
 
 function Feed(props){
     const Web3Api = useMoralisWeb3Api();
@@ -45,9 +47,15 @@ function Feed(props){
                                         <FaArrowUp/>
                                     </Button>
                                     <Badge bg='light' text='dark'>{item.likes}</Badge>
+                                    <Button size='sm' variant='outline-*'>
+                                        <FaArrowDown/>
+                                    </Button>
                                 </div>
                         </ListGroup.Item>
                     )})}
+                    <Button size='sm' variant='outline-light' style={{color:'black'}}>
+                        Add Post
+                    </Button>
             </ListGroup>
         </Container>
     )
