@@ -487,7 +487,7 @@ const mintABI = [
 ]
 
 const dherrd = [
-    [
+    
         {
             "anonymous": false,
             "inputs": [
@@ -724,8 +724,10 @@ const dherrd = [
             "stateMutability": "view",
             "type": "function"
         }
-    ]
+    
 ]
 
-export default dherrd;
-export default mintABI;
+export{ 
+    mintABI, 
+    dherrd
+}

@@ -8,6 +8,7 @@ import { FaArrowDown } from 'react-icons/fa';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
 import { useMoralisWeb3Api } from "react-moralis";
+import dherrd from '../utils/abi';
 //add listeners to buttons
 
 function Feed(props){
@@ -27,6 +28,9 @@ function Feed(props){
               console.log(testnetNFTs)
             }
         fetchNFTs()
+        async function fetchPosts(){
+            
+        }
     }
     
     )
