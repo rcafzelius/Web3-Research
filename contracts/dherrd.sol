@@ -1,43 +1,5 @@
 pragma solidity ^0.8.10;
-    library SafeMath {
-    
-        function add(uint256 a, uint256 b) internal pure returns (uint256) {
-            uint256 c = a + b;
-            require(c >= a, "SafeMath: addition overflow");
-            return c;
-        }
-    
-        function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-            return sub(a, b, "SafeMath: subtraction overflow");
-        }
-    
-        function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-            require(b <= a, errorMessage);
-            uint256 c = a - b;
-            return c;
-        }
-    
-        function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-            if (a == 0) {
-                return 0;
-            }
-    
-            uint256 c = a * b;
-            require(c / a == b, "SafeMath: multiplication overflow");
-            return c;
-        }
-    
-        function div(uint256 a, uint256 b) internal pure returns (uint256) {
-            return div(a, b, "SafeMath: division by zero");
-        }
-    
-        function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-            require(b > 0, errorMessage);
-            uint256 c = a / b;
-            return c;
-        }
-    
-    }
+import '@openzeppelin/contracts/utils/math/SafeMath.sol';
 
 contract content {
     using SafeMath for *;
@@ -46,11 +8,11 @@ contract content {
 
     //Events
     event logPostCreated(address author, uint postId);
-    event logLike(address from, uint post);
+    event logLiske(address from, uint post);
     event logUnLike(address from, uint post);
     event logDislike(address from, uint post);
     event logUnDislike(address from, uint post);
-    event logComment(address author, uint postId);
+    event logComment(address author, uint postId, totalComments);
 
     //Post Structure
     struct Post{
@@ -60,13 +22,14 @@ contract content {
         uint timestamp;
         uint likeCount;
         uint dislikeCount;
+        uint totalComments;
     }
 
     //Comment Structure
     struct Comment{
+        uint postId;
         uint commentId;
         address author;
-        uint postId;
         string content;
         uint likeCount;
         uint dislikeCount;
@@ -74,11 +37,10 @@ contract content {
     }
 
     uint public totalPosts;
-    uint public totalComments;
     address payable public owner;
 
     mapping(uint=>Post) private posts; //Mapping from Post ID to Post
-    mapping(uint=>Comment) private comments; //Mapping from CommentID to comments
+    mapping(uint=>mapping(uint=>Comment)) comments; //Mapping from CommentID to comments
     mapping(uint=>mapping(address=>bool)) likes; //Mapping from post to address to wether or not post has been liked
     mapping (uint=>mapping(address=>bool)) dislikes; //Mapping from post to address to wether or not the post has been dislked
 
@@ -95,13 +57,24 @@ contract content {
     function createPost(string memory _content) public {
         totalPosts=totalPosts.add(1);
         uint id=totalPosts;
-        posts[id]=Post(id,msg.sender,_content,block.timestamp,0,0);
+        posts[id]=Post(id,msg.sender,_content,block.timestamp,0,0,0);
         emit logPostCreated(msg.sender, totalPosts);
     }
 
+    function createComment(uint _postId, string memory _content) public {
+        posts[_id].totalComments = posts[_id].totalComments.add(1);
+        comments[_postId][posts[_id].totalComments] = Comment(_postId, msg.sender, _content, 0, 0, block.timestamp);
+        emit logComment(msg.sender, _postId, _totalComments);
+    }
+
     function getPost(uint _id) public view returns (
-        address author, string memory content, uint timestamp, uint likeCount, uint dislikeCount ){
-        return (posts[_id].author, posts[_id].content, posts[_id].timestamp, posts[_id].likeCount, posts[_id].dislikeCount);
+        uint postId, address author, string memory content, uint timestamp, uint likeCount, uint dislikeCount, uint totalComments ){
+        return (posts[_id].postId, posts[_id].author, posts[_id].content, posts[_id].timestamp, posts[_id].likeCount, posts[_id].dislikeCount, posts[_id].totalComments);
+    }
+
+    function getComment(_postId, _commentId) public view returns (uint postId, uint commentId, address author, string content, uint likeCount, uint dislikeCount, uint timestamp){
+        comment = comments[_postId][_commentId];
+        return (comment.postId, comment.commentId, comment.author, comment.content, comment.likeCount, comment.dislikeCount, comment.timestamp);
     }
 
     function Like(uint _id) public {
