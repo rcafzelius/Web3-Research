@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import mintABI from '../utils/abi';
+import { mintABI } from '../utils/abi';
 import GoogleLogin from 'react-google-login';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useMoralis } from "react-moralis";
 
 function Login(props){

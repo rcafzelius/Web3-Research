@@ -486,7 +486,7 @@ const mintABI = [
     }
 ]
 
-const dherrd = [
+const dherrdABI = [
     
         {
             "anonymous": false,
@@ -727,7 +727,7 @@ const dherrd = [
     
 ]
 
-export{ 
+export { 
     mintABI, 
-    dherrd
+    dherrdABI,
 }
