@@ -16,6 +16,8 @@ import { BigNumber } from 'ethers';
 function Feed(props){
     const Web3Api = useMoralisWeb3Api();
     const [postData, setPostData] = useState({posts: []});
+    const [toggleAddPost, setToggleAddPost] = useState(false);
+    const [newPost, setNewPost] = useState('');
     const [somethingChanged] = useState(false);
     const {
         Moralis
@@ -32,7 +34,7 @@ function Feed(props){
         fetchNFTs()
 
         async function fetchPosts(){
-            const dherrdAddr = '0xDa0C7b1d3C105bB4e03f35A0BABc922eEbD8DD94';
+            const dherrdAddr = '0xB5088a0782Ea8c8E9c9a335589f64070D1DC1A15';
             const totalPostOptions = {
                 contractAddress: dherrdAddr,
                 functionName: "totalPosts",
@@ -46,17 +48,20 @@ function Feed(props){
                     return tpc.toNumber()
                 }
             );
-            const options = {
-                contractAddress: dherrdAddr,
-                functionName: "getPost",
-                abi: dherrdABI,
-                params: {
-                    _id: 1,
-                  },
+            const messages = []
+            for (let i = totalPostCount; i > 0; i --){
+                const options = {
+                    contractAddress: dherrdAddr,
+                    functionName: "getPost",
+                    abi: dherrdABI,
+                    params: {
+                        _id: i,
+                    },
+                }
+                const message = await Moralis.executeFunction(options)
+                messages.push(message)
             }
-            const message = await Moralis.executeFunction(options)
-            const messages = [message]
-            console.log(message)
+            console.log(messages)
             setPostData({
                 ...postData,
                 posts: messages
@@ -65,6 +70,9 @@ function Feed(props){
         fetchPosts()
     }, [somethingChanged])
 
+    function handleNewPostChange(e){
+        setNewPost(e.target.value)
+    }
     function handleAddPost(){
         
     }
@@ -97,7 +105,7 @@ function Feed(props){
                 {postData.posts.map((item,i)=>{
                     return(
                         <ListGroup.Item key={i} className="d-flex justify-content-between align-items-start">
-                                {item[1]}
+                                {item.content}
                                 <div style={{display: 'flex', flexDirection:'column'}}>
                                     <Button size='sm' variant='outline-*' onClick={(e) => handleUpvote()}>
                                         <FaArrowUp/>
@@ -109,9 +117,15 @@ function Feed(props){
                                 </div>
                         </ListGroup.Item>
                     )})}
-                    <Button size='sm' variant='outline-light' style={{color:'black'}} onClick={(e) => handleAddPost()}>
+                    {toggleAddPost?
+                    <form onSubmit={handleAddPost}>
+                        <input type="text" name="post" value={newPost} onChange={handleNewPostChange}/>
+                    </form>:
+                    <Button size='sm' variant='outline-light' style={{color:'black'}} onClick={setToggleAddPost}>
                         Add Post
                     </Button>
+                    
+                    }
             </ListGroup>
         </Container>
     )
