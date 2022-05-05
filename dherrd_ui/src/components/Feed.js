@@ -14,7 +14,7 @@ import { BigNumber } from 'ethers';
 //add listeners to buttons
 
 function Feed(props) {
-    const dherrdAddr = '0xB5088a0782Ea8c8E9c9a335589f64070D1DC1A15';
+    const dherrdAddr = '0xB1aFCe26F1b78d98c55cd40F91af56048ef09140';
     const Web3Api = useMoralisWeb3Api();
     const [postData, setPostData] = useState({ posts: [] });
     const [toggleAddPost, setToggleAddPost] = useState(false);
@@ -110,12 +110,30 @@ function Feed(props) {
         setToggleAddComment(false)
         //setSomethingChanged(true)
     }
-    function handleUpvote() {
-
+    function handlePostLike(id){
+        const likeOptions = {
+            contractAddress: dherrdAddr,
+            functionName: "Like",
+            abi: dherrdABI,
+            params: {
+                _id: id,
+            },
+        }
+        await Moralis.executeFunction(likeOptions)
     }
-    function handleDownvote() {
 
+    function handlePostDislike(id){
+        const dislikeOptions = {
+            contractAddress: dherrdAddr,
+            functionName: "Dislike",
+            abi: dherrdABI,
+            params: {
+                _id: id,
+            },
+        }
+        await Moralis.executeFunction(dislikeOptions)
     }
+
     function getNetLikes(upvotes, downvotes) {
         //console.log(upvotes.toNumber())
         try {
@@ -153,11 +171,11 @@ function Feed(props) {
                                 }
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                <Button size='sm' variant='outline-*' onClick={(e) => handleUpvote()}>
+                                <Button size='sm' variant='outline-*' onClick={(e) => handlePostLike(postId)}>
                                     <FaArrowUp />
                                 </Button>
                                 <Badge bg='light' text='dark'>{getNetLikes(item.likeCount, item.dislikeCount)}</Badge>
-                                <Button size='sm' variant='outline-*' onClick={(e) => handleDownvote()}>
+                                <Button size='sm' variant='outline-*' onClick={(e) => handlePostDislike(postId)}>
                                     <FaArrowDown />
                                 </Button>
                             </div>
