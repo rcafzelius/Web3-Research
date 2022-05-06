@@ -10,22 +10,22 @@ import Badge from 'react-bootstrap/Badge';
 import { useMoralisWeb3Api } from "react-moralis";
 import { dherrdABI } from '../utils/abi';
 import { useMoralis } from "react-moralis";
-import { BigNumber } from 'ethers';
 //add listeners to buttons
 
 function Feed(props) {
     const dherrdAddr = '0xB1aFCe26F1b78d98c55cd40F91af56048ef09140';
     const Web3Api = useMoralisWeb3Api();
     const [postData, setPostData] = useState({ posts: [] });
+    const [commentData, setCommentData] = useState({ comments: {} })
     const [toggleAddPost, setToggleAddPost] = useState(false);
     const [newPost, setNewPost] = useState('');
-    const [toggleAddComment, setToggleAddComment] = useState({state:false,row:''});
-    const [newComment, setNewComment] = useState({row:'', comment:''});
+    const [toggleAddComment, setToggleAddComment] = useState({ state: false, row: '' });
+    const [newComment, setNewComment] = useState({ row: '', comment: '' });
     const [somethingChanged, setSomethingChanged] = useState(false);
     const {
         Moralis
     } = useMoralis();
-    //var oldaddr = "0xB22F31b14092fe1639EBb33c62C3320Fb71Bd9c3"
+    //const oldaddr = "0xB22F31b14092fe1639EBb33c62C3320Fb71Bd9c3"
     //const addr = "0x63352EBE37b7cF82b2c2cEEA8903C049C7B4CD08";
     useEffect(() => {
         async function fetchNFTs() {
@@ -37,13 +37,11 @@ function Feed(props) {
         fetchNFTs()
 
         async function fetchPosts() {
+            //fetch posts
             const totalPostOptions = {
                 contractAddress: dherrdAddr,
                 functionName: "totalPosts",
                 abi: dherrdABI,
-                params: {
-                    _newMessage: "Hello Moralis",
-                },
             }
             const totalPostCount = await Moralis.executeFunction(totalPostOptions).then(
                 (tpc) => {
@@ -51,8 +49,9 @@ function Feed(props) {
                 }
             );
             const messages = []
+            const allComments = {}
             for (let i = totalPostCount; i > 0; i--) {
-                const options = {
+                const postOptions = {
                     contractAddress: dherrdAddr,
                     functionName: "getPost",
                     abi: dherrdABI,
@@ -60,10 +59,33 @@ function Feed(props) {
                         _id: i,
                     },
                 }
-                const message = await Moralis.executeFunction(options)
+                const message = await Moralis.executeFunction(postOptions)
+                const totalComments = message.totalComments
+                const comments = []
+                for (let j = totalComments; j > 0; j--) {
+                    const commentOptions = {
+                        contractAddress: dherrdAddr,
+                        functionName: "getComment",
+                        abi: dherrdABI,
+                        params: {
+                            _postId: i,
+                            _commentId: j,
+                        },
+                    }
+                    const comment = await Moralis.executeFunction(commentOptions)
+                    comments.push(comment)
+                }
+                allComments[i] = comments
                 messages.push(message)
             }
+
+
             console.log(messages)
+            console.log(allComments)
+            setCommentData({
+                ...commentData,
+                comments: allComments
+            })
             setPostData({
                 ...postData,
                 posts: messages
@@ -89,28 +111,29 @@ function Feed(props) {
         setToggleAddPost(false)
         //setSomethingChanged(true)
     }
-    function handleToggleAddComment(e,i) {
+    function handleToggleAddComment(e, i) {
         console.log(i)
-        setToggleAddComment({state: true, row: i});
+        setToggleAddComment({ state: true, row: i });
     }
-    function handleNewCommentChange(e,i) {
-        setNewComment({row: i, comment: e.target.value})
+    function handleNewCommentChange(e, i) {
+        setNewComment({ row: i, comment: e.target.value })
     }
-    async function handleAddComment() {
-        //change this
+    async function handleAddComment(e, i) {
+        console.log(newComment.comment)
         const createCommentOptions = {
             contractAddress: dherrdAddr,
-            functionName: "createPost",
+            functionName: "createComment",
             abi: dherrdABI,
             params: {
-                _content: newPost,
+                _postId: i,
+                _content: newComment.comment,
             },
         }
         await Moralis.executeFunction(createCommentOptions);
         setToggleAddComment(false)
         //setSomethingChanged(true)
     }
-    function handlePostLike(id){
+    async function handlePostLike(id) {
         const likeOptions = {
             contractAddress: dherrdAddr,
             functionName: "Like",
@@ -122,7 +145,7 @@ function Feed(props) {
         await Moralis.executeFunction(likeOptions)
     }
 
-    function handlePostDislike(id){
+    async function handlePostDislike(id) {
         const dislikeOptions = {
             contractAddress: dherrdAddr,
             functionName: "Dislike",
@@ -156,26 +179,37 @@ function Feed(props) {
                 {postData.posts.map((item, i) => {
                     return (
                         <ListGroup.Item key={i} className="d-flex justify-content-between align-items-start">
-                            {item.content}
                             <div>
-                                {toggleAddComment.state && toggleAddComment.row === item.postId?
-                                    <form onSubmit={handleAddComment}>
-                                        <input type="text" name="post" value={newComment.comment} onChange={(e) => handleNewCommentChange(e,item.postId)} />
-                                        <Button size='sm' variant='outline-light' style={{ color: 'black' }} onClick={handleAddComment}>
+                                <h4>{item.content}</h4>
+                                <ListGroup style={{ width: '100%', margin: 'auto' }}>
+                                    {commentData.comments[item.postId].map((comment, j) => {
+                                        return (
+                                            <ListGroup.Item key={j}>
+                                                {comment.content}
+                                            </ListGroup.Item>
+                                        )
+                                    })}
+                                </ListGroup>
+                                <div>
+                                    {toggleAddComment.state && toggleAddComment.row === item.postId ?
+                                        <form onSubmit={(e) => handleAddComment(e, item.postId)}>
+                                            <input type="text" name="post" value={newComment.comment} onChange={(e) => handleNewCommentChange(e, item.postId)} />
+                                            <Button size='sm' variant='outline-light' style={{ color: 'black' }} onClick={(e) => handleAddComment(e, item.postId)}>
+                                                Add Comment
+                                            </Button>
+                                        </form> :
+                                        <Button size='sm' variant='outline-light' style={{ color: 'black' }} onClick={(e) => handleToggleAddComment(e, item.postId)}>
                                             Add Comment
                                         </Button>
-                                    </form> :
-                                    <Button size='sm' variant='outline-light' style={{ color: 'black' }} onClick={(e) => handleToggleAddComment(e,item.postId)}>
-                                        Add Comment
-                                    </Button>
-                                }
+                                    }
+                                </div>
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                <Button size='sm' variant='outline-*' onClick={(e) => handlePostLike(postId)}>
+                                <Button size='sm' variant='outline-*' onClick={(e) => handlePostLike(item.postId)}>
                                     <FaArrowUp />
                                 </Button>
                                 <Badge bg='light' text='dark'>{getNetLikes(item.likeCount, item.dislikeCount)}</Badge>
-                                <Button size='sm' variant='outline-*' onClick={(e) => handlePostDislike(postId)}>
+                                <Button size='sm' variant='outline-*' onClick={(e) => handlePostDislike(item.postId)}>
                                     <FaArrowDown />
                                 </Button>
                             </div>
