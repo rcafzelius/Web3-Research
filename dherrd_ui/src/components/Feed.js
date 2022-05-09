@@ -11,7 +11,7 @@ import { dherrdABI } from '../utils/abi';
 import { useMoralis } from "react-moralis";
 
 function Feed(props) {
-    const dherrdAddr = '0xd10A11BF639fCe8f8657F3c4E79864B3f79B1675';
+    const dherrdAddr = '0xB34DD021bA41D9cB2b12E927926B1B1aCAA2Ba26';
     const [postData, setPostData] = useState({ posts: [] });
     const [commentData, setCommentData] = useState({ comments: {} })
     const [toggleAddPost, setToggleAddPost] = useState(false);
