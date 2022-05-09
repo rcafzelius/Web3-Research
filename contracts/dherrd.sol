@@ -8,11 +8,11 @@ contract content {
 
     //Events
     event logPostCreated(address author, uint postId);
-    event logLiske(address from, uint post);
+    event logLike(address from, uint post);
     event logUnLike(address from, uint post);
     event logDislike(address from, uint post);
     event logUnDislike(address from, uint post);
-    event logComment(address author, uint postId, totalComments);
+    event logComment(address author, uint postId, uint totalComments);
 
     //Post Structure
     struct Post{
@@ -41,8 +41,8 @@ contract content {
 
     mapping(uint=>Post) private posts; //Mapping from Post ID to Post
     mapping(uint=>mapping(uint=>Comment)) comments; //Mapping from CommentID to comments
-    mapping(uint=>mapping(address=>bool)) likes; //Mapping from post to address to wether or not post has been liked
-    mapping (uint=>mapping(address=>bool)) dislikes; //Mapping from post to address to wether or not the post has been dislked
+    mapping(uint=>mapping(address=>bool)) likes; //Mapping from post to address to wether or not post has been liked by a specific user
+    mapping (uint=>mapping(address=>bool)) dislikes; //Mapping from post to address to wether or not the post has been dislked by a specific user
 
     modifier onlyOwner() {
         require(isOwner == msg.sender, "not owner");
@@ -53,7 +53,7 @@ contract content {
         isOwner = msg.sender;
     }
 
-    //Check on the validity of calling multiple transactions
+    //Create a post and store it in the posts mapping
     function createPost(string memory _content) public {
         totalPosts=totalPosts.add(1);
         uint id=totalPosts;
@@ -61,41 +61,36 @@ contract content {
         emit logPostCreated(msg.sender, totalPosts);
     }
 
+    //Create a comment and store it in the comments mapping.
     function createComment(uint _postId, string memory _content) public {
-        posts[_id].totalComments = posts[_id].totalComments.add(1);
-        comments[_postId][posts[_id].totalComments] = Comment(_postId, msg.sender, _content, 0, 0, block.timestamp);
-        emit logComment(msg.sender, _postId, _totalComments);
+        posts[_postId].totalComments = posts[_postId].totalComments.add(1);
+        comments[_postId][posts[_postId].totalComments] = Comment(_postId, posts[_postId].totalComments, msg.sender, _content, 0, 0, block.timestamp);
+        emit logComment(msg.sender, _postId, posts[_postId].totalComments);
     }
 
+    //Function for getting a post from an id. This is used for grabbing post information for front end
     function getPost(uint _id) public view returns (
         uint postId, address author, string memory content, uint timestamp, uint likeCount, uint dislikeCount, uint totalComments ){
         return (posts[_id].postId, posts[_id].author, posts[_id].content, posts[_id].timestamp, posts[_id].likeCount, posts[_id].dislikeCount, posts[_id].totalComments);
     }
 
-    function getComment(_postId, _commentId) public view returns (uint postId, uint commentId, address author, string content, uint likeCount, uint dislikeCount, uint timestamp){
-        comment = comments[_postId][_commentId];
+    //Function for getting all of a comments information. This is used for front-end interactions.
+    function getComment(uint _postId, uint _commentId) public view returns (uint postId, uint commentId, address author, string memory content, uint likeCount, uint dislikeCount, uint timestamp){
+        Comment memory comment = comments[_postId][_commentId];
         return (comment.postId, comment.commentId, comment.author, comment.content, comment.likeCount, comment.dislikeCount, comment.timestamp);
     }
 
+    //For liking a post. Takes in post id and updates the like count
     function Like(uint _id) public {
-        if  (likes[_id][msg.sender] = true) {
-            likes[_id][msg.sender] = false;
-            emit logUnLike(msg.sender, _id);
-        } else {
             likes[_id][msg.sender] = true;
-            emit logUnLike(msg.sender, _id);
-        }
+            posts[_id].likeCount = posts[_id].likeCount.add(1);
+            emit logLike(msg.sender, _id);
     }
 
+    //For disliking a post. Takes in post id and updates the dislike count
     function Dislike(uint _id) public {
-        if  (dislikes[_id][msg.sender] = true) {
-            dislikes[_id][msg.sender] = false;
-            emit logUnDislike(msg.sender, _id);
-        } else {
             dislikes[_id][msg.sender] = true;
+            posts[_id].likeCount = posts[_id].dislikeCount.add(1);
             emit logDislike(msg.sender, _id);
-        }
     }
-
-
 }
