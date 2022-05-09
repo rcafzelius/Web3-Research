@@ -9,7 +9,6 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
 import { dherrdABI } from '../utils/abi';
 import { useMoralis } from "react-moralis";
-//add listeners to buttons
 
 function Feed(props) {
     const dherrdAddr = '0xd10A11BF639fCe8f8657F3c4E79864B3f79B1675';
