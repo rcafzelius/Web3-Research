@@ -90,7 +90,7 @@ contract content {
     //For disliking a post. Takes in post id and updates the dislike count
     function Dislike(uint _id) public {
             dislikes[_id][msg.sender] = true;
-            posts[_id].likeCount = posts[_id].dislikeCount.add(1);
+            posts[_id].dislikeCount = posts[_id].dislikeCount.add(1);
             emit logDislike(msg.sender, _id);
     }
 }
