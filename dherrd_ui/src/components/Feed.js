@@ -7,14 +7,12 @@ import { FaArrowUp } from 'react-icons/fa';
 import { FaArrowDown } from 'react-icons/fa';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
-import { useMoralisWeb3Api } from "react-moralis";
 import { dherrdABI } from '../utils/abi';
 import { useMoralis } from "react-moralis";
 //add listeners to buttons
 
 function Feed(props) {
     const dherrdAddr = '0xd10A11BF639fCe8f8657F3c4E79864B3f79B1675';
-    const Web3Api = useMoralisWeb3Api();
     const [postData, setPostData] = useState({ posts: [] });
     const [commentData, setCommentData] = useState({ comments: {} })
     const [toggleAddPost, setToggleAddPost] = useState(false);
@@ -25,7 +23,7 @@ function Feed(props) {
     const {
         Moralis
     } = useMoralis();
-    
+
     useEffect(() => {
         async function fetchPosts() {
             //fetch posts
@@ -70,7 +68,7 @@ function Feed(props) {
                 messages.push(message)
             }
             console.log(messages)
-            
+
             setCommentData({
                 ...commentData,
                 comments: allComments
