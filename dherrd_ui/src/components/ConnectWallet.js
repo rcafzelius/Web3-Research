@@ -3,79 +3,77 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 
-function ConnectWallet(props){
+function ConnectWallet(props) {
     let navigate = useNavigate();
     const {
         user,
         authenticate,
         isAuthenticated,
         Moralis
-      } = useMoralis();
-      const Web3Api = useMoralisWeb3Api();
+    } = useMoralis();
+    const Web3Api = useMoralisWeb3Api();
 
-    async function login(){
+    async function login() {
         if (!isAuthenticated) {
             await authenticate({ signingMessage: "Log in using Moralis" })
-            .then(function (user) {
-                console.log("logged in user:", user);
-                console.log(user.get("ethAddress"));
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+                .then(function (user) {
+                    console.log("logged in user:", user);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         }
         await Moralis.enableWeb3();
         props.setAccounts(user.attributes.ethAddress);
         const hasToken = await fetchNFTs();
-        if (hasToken){
+        if (hasToken) {
             //user is verified, go to feed
-            console.log("found token")
             props.setVerified(true);
             navigate("/");
-        }else{
+        } else {
             //send user to login, mint token
-            console.log("rerouting")
             navigate('/login');
         }
     };
 
-    async function fetchNFTs(){
+    async function fetchNFTs() {
         // get rinkeby NFTs for user
         const testnetNFTs = await Web3Api.Web3API.account.getNFTs({
-          chain: "rinkeby",
+            chain: "rinkeby",
         });
-        const mintAddr = "0x63352EBE37b7cF82b2c2cEEA8903C049C7B4CD08".toLowerCase();
+        console.log(testnetNFTs)
+        const mintAddr = "0xCcb60C239fe819D81cA9a205779c8055dcfEDdCb".toLowerCase();
         const foundToken = testnetNFTs.result.find(nft => nft.token_address === mintAddr)
-        if (foundToken){
+        if (foundToken) {
             return true
-        }else{
+        } else {
             return false
         }
-      };
+    };
 
-    function checkMetaMask(){
-        if (window.ethereum){
-            return(
+    function checkMetaMask() {
+        if (window.ethereum) {
+            return (
                 <Button onClick={(e) => login()}>Connect To MetaMask</Button>
             )
         }
-        else{
-            return('Please install Metamask')
+        else {
+            return ('Please install Metamask')
         }
     }
 
-    return(
+    return (
         <Container fluid>
             <Row>
-                <Col sm={{offset:5}}>
+                <Col sm={{ offset: 5 }}>
                     <h3>Welcome to DeChat</h3>
                 </Col>
             </Row>
             <Row>
-                <Col sm={{offset:5}}>
+                <Col sm={{ offset: 5 }}>
                     {checkMetaMask()}
                 </Col>
             </Row>

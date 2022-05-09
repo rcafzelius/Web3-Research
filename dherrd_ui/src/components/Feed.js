@@ -7,14 +7,12 @@ import { FaArrowUp } from 'react-icons/fa';
 import { FaArrowDown } from 'react-icons/fa';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
-import { useMoralisWeb3Api } from "react-moralis";
 import { dherrdABI } from '../utils/abi';
 import { useMoralis } from "react-moralis";
 //add listeners to buttons
 
 function Feed(props) {
-    const dherrdAddr = '0xB1aFCe26F1b78d98c55cd40F91af56048ef09140';
-    const Web3Api = useMoralisWeb3Api();
+    const dherrdAddr = '0xd10A11BF639fCe8f8657F3c4E79864B3f79B1675';
     const [postData, setPostData] = useState({ posts: [] });
     const [commentData, setCommentData] = useState({ comments: {} })
     const [toggleAddPost, setToggleAddPost] = useState(false);
@@ -25,17 +23,8 @@ function Feed(props) {
     const {
         Moralis
     } = useMoralis();
-    //const oldaddr = "0xB22F31b14092fe1639EBb33c62C3320Fb71Bd9c3"
-    //const addr = "0x63352EBE37b7cF82b2c2cEEA8903C049C7B4CD08";
-    useEffect(() => {
-        async function fetchNFTs() {
-            const testnetNFTs = await Web3Api.Web3API.account.getNFTs({
-                chain: "rinkeby",
-            });
-            console.log(testnetNFTs)
-        }
-        fetchNFTs()
 
+    useEffect(() => {
         async function fetchPosts() {
             //fetch posts
             const totalPostOptions = {
@@ -78,10 +67,8 @@ function Feed(props) {
                 allComments[i] = comments
                 messages.push(message)
             }
-
-
             console.log(messages)
-            console.log(allComments)
+
             setCommentData({
                 ...commentData,
                 comments: allComments
@@ -92,7 +79,7 @@ function Feed(props) {
             })
         }
         fetchPosts()
-        //setSomethingChanged(false)
+        setSomethingChanged(false)
     }, [somethingChanged])
 
     function handleNewPostChange(e) {
@@ -109,17 +96,15 @@ function Feed(props) {
         }
         await Moralis.executeFunction(createPostOptions);
         setToggleAddPost(false)
-        //setSomethingChanged(true)
+        setSomethingChanged(true)
     }
     function handleToggleAddComment(e, i) {
-        console.log(i)
         setToggleAddComment({ state: true, row: i });
     }
     function handleNewCommentChange(e, i) {
         setNewComment({ row: i, comment: e.target.value })
     }
     async function handleAddComment(e, i) {
-        console.log(newComment.comment)
         const createCommentOptions = {
             contractAddress: dherrdAddr,
             functionName: "createComment",
@@ -131,7 +116,7 @@ function Feed(props) {
         }
         await Moralis.executeFunction(createCommentOptions);
         setToggleAddComment(false)
-        //setSomethingChanged(true)
+        setSomethingChanged(true)
     }
     async function handlePostLike(id) {
         const likeOptions = {
@@ -158,7 +143,6 @@ function Feed(props) {
     }
 
     function getNetLikes(upvotes, downvotes) {
-        //console.log(upvotes.toNumber())
         try {
             const net = upvotes - downvotes
             return net

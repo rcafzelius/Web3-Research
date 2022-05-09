@@ -188,13 +188,6 @@ const mintABI = [
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "toggleIsMintEnabled",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
         "anonymous": false,
         "inputs": [
             {
@@ -256,6 +249,19 @@ const mintABI = [
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "allowTransfer",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "address",
@@ -307,19 +313,6 @@ const mintABI = [
             }
         ],
         "name": "isApprovedForAll",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "isMintEnabled",
         "outputs": [
             {
                 "internalType": "bool",
@@ -487,320 +480,320 @@ const mintABI = [
 ]
 
 const dherrdABI = [
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "author",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "postId",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "totalComments",
-				"type": "uint256"
-			}
-		],
-		"name": "logComment",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "post",
-				"type": "uint256"
-			}
-		],
-		"name": "logDislike",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "post",
-				"type": "uint256"
-			}
-		],
-		"name": "logLiske",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "author",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "postId",
-				"type": "uint256"
-			}
-		],
-		"name": "logPostCreated",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "post",
-				"type": "uint256"
-			}
-		],
-		"name": "logUnDislike",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "post",
-				"type": "uint256"
-			}
-		],
-		"name": "logUnLike",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_postId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "_content",
-				"type": "string"
-			}
-		],
-		"name": "createComment",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_content",
-				"type": "string"
-			}
-		],
-		"name": "createPost",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_id",
-				"type": "uint256"
-			}
-		],
-		"name": "Dislike",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_id",
-				"type": "uint256"
-			}
-		],
-		"name": "Like",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_postId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_commentId",
-				"type": "uint256"
-			}
-		],
-		"name": "getComment",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "postId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "commentId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "author",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "content",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "likeCount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "dislikeCount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "timestamp",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_id",
-				"type": "uint256"
-			}
-		],
-		"name": "getPost",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "postId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "author",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "content",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "timestamp",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "likeCount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "dislikeCount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "totalComments",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"internalType": "address payable",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "totalPosts",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	}
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "author",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "postId",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "totalComments",
+                "type": "uint256"
+            }
+        ],
+        "name": "logComment",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "post",
+                "type": "uint256"
+            }
+        ],
+        "name": "logDislike",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "post",
+                "type": "uint256"
+            }
+        ],
+        "name": "logLike",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "author",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "postId",
+                "type": "uint256"
+            }
+        ],
+        "name": "logPostCreated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "post",
+                "type": "uint256"
+            }
+        ],
+        "name": "logUnDislike",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "post",
+                "type": "uint256"
+            }
+        ],
+        "name": "logUnLike",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_postId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "_content",
+                "type": "string"
+            }
+        ],
+        "name": "createComment",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "_content",
+                "type": "string"
+            }
+        ],
+        "name": "createPost",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_id",
+                "type": "uint256"
+            }
+        ],
+        "name": "Dislike",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_id",
+                "type": "uint256"
+            }
+        ],
+        "name": "Like",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_postId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_commentId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getComment",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "postId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "commentId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "author",
+                "type": "address"
+            },
+            {
+                "internalType": "string",
+                "name": "content",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "likeCount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "dislikeCount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_id",
+                "type": "uint256"
+            }
+        ],
+        "name": "getPost",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "postId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "author",
+                "type": "address"
+            },
+            {
+                "internalType": "string",
+                "name": "content",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "likeCount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "dislikeCount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "totalComments",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "internalType": "address payable",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "totalPosts",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
 ]
 
-export { 
-    mintABI, 
+export {
+    mintABI,
     dherrdABI,
 }
