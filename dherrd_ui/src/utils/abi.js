@@ -547,7 +547,7 @@ const dherrdABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "logLiske",
+		"name": "logLike",
 		"type": "event"
 	},
 	{

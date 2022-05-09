@@ -26,7 +26,6 @@ function Login(props){
             abi: mintABI,
         }
         const message = await Moralis.executeFunction(options)
-        console.log(message, "mint complete")
         setResultText("");
         props.setVerified(true);
         navigate("/");

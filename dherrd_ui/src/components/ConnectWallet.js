@@ -21,7 +21,6 @@ function ConnectWallet(props){
             await authenticate({ signingMessage: "Log in using Moralis" })
             .then(function (user) {
                 console.log("logged in user:", user);
-                console.log(user.get("ethAddress"));
             })
             .catch(function (error) {
                 console.log(error);
@@ -32,12 +31,10 @@ function ConnectWallet(props){
         const hasToken = await fetchNFTs();
         if (hasToken){
             //user is verified, go to feed
-            console.log("found token")
             props.setVerified(true);
             navigate("/");
         }else{
             //send user to login, mint token
-            console.log("rerouting")
             navigate('/login');
         }
     };
